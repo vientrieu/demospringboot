@@ -31,7 +31,7 @@ public class Course implements Serializable {
     private Long id;
     @Column(name = "course_name")
     private String courseName;
-    @Column(name = "course_code")
+    @Column(name = "course_code", unique = true)
     private String courseCode;
     @ManyToOne
     private Teacher teacher;

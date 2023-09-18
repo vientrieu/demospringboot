@@ -1,7 +1,8 @@
 package com.example.demospringboot.controller;
 
-import com.example.demospringboot.entity.Student;
+import com.example.demospringboot.dto.StudentDto;
 import com.example.demospringboot.service.CRUDService;
+import com.example.demospringboot.service.RandomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,23 +26,30 @@ import java.util.List;
 @RequestMapping("/api/student")
 public class StudentController {
     @Autowired
-    private CRUDService<Student> studentCRUDService;
+    private CRUDService<StudentDto> studentCRUDService;
+    @Autowired
+    private RandomService randomService;
 
     @GetMapping
-    public List<Student> readStudents() {
+    public List<StudentDto> readStudents() {
         return studentCRUDService.read();
     }
     @PostMapping
-    public Student createStudent(@RequestBody Student input) {
+    public StudentDto createStudent(@RequestBody StudentDto input) {
         return studentCRUDService.create(input);
     }
     @PutMapping
-    public Student updateStudent(@RequestBody Student newValue) {
+    public StudentDto updateStudent(@RequestBody StudentDto newValue) {
         return studentCRUDService.update(newValue);
     }
     @DeleteMapping
     public boolean deleteStudent(@RequestParam("id") Long id, @RequestParam("lop") Long lop) {
         return studentCRUDService.delete(id);
+    }
+
+    @GetMapping("/random-data")
+    public Object random() {
+        return randomService.random();
     }
 
 }

@@ -8,6 +8,7 @@ import com.example.demospringboot.repository.CourseRepository;
 import com.example.demospringboot.repository.StudentRepository;
 import com.example.demospringboot.service.CRUDService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,7 @@ public class StudentServiceImpl implements CRUDService<StudentDto> {
                 throw new CustomizeException("1001", "Mã khóa học " + course.getCourseCode() + " không được tìm thấy!");
             }
         });
-        try{
+        try {
             Student save = studentRepository.save(student);
             return objectMapper.convertValue(save, StudentDto.class);
         } catch (Exception e) {
@@ -70,4 +71,10 @@ public class StudentServiceImpl implements CRUDService<StudentDto> {
         studentRepository.deleteById(id);
         return true;
     }
+
+    @VisibleForTesting
+    public String mapData(String tenSinhVien, String lop) {
+        return "Sinh vien " + tenSinhVien + " hoc lop " + lop;
+    }
+
 }

@@ -3,6 +3,7 @@ package com.example.demospringboot.controller;
 import com.example.demospringboot.dto.StudentDto;
 import com.example.demospringboot.service.CRUDService;
 import com.example.demospringboot.service.RandomService;
+import com.example.demospringboot.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,19 +30,24 @@ public class StudentController {
     private CRUDService<StudentDto> studentCRUDService;
     @Autowired
     private RandomService randomService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @GetMapping
     public List<StudentDto> readStudents() {
         return studentCRUDService.read();
     }
+
     @PostMapping
     public StudentDto createStudent(@RequestBody StudentDto input) {
         return studentCRUDService.create(input);
     }
+
     @PutMapping
     public StudentDto updateStudent(@RequestBody StudentDto newValue) {
         return studentCRUDService.update(newValue);
     }
+
     @DeleteMapping
     public boolean deleteStudent(@RequestParam("id") Long id, @RequestParam("lop") Long lop) {
         return studentCRUDService.delete(id);
@@ -50,6 +56,11 @@ public class StudentController {
     @GetMapping("/random-data")
     public Object random() {
         return randomService.random();
+    }
+
+    @PostMapping("/login")
+    public String login() {
+        return jwtUtil.generateJwt();
     }
 
 }

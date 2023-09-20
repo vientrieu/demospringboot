@@ -8,7 +8,7 @@ import com.example.demospringboot.repository.CourseRepository;
 import com.example.demospringboot.repository.StudentRepository;
 import com.example.demospringboot.service.CRUDService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.annotations.VisibleForTesting;
+import org.assertj.core.util.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

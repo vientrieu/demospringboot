@@ -15,6 +15,8 @@ public class SecurityConfig {
 
     @Autowired
     private JWTFilter jwtFilter;
+    @Autowired
+    private RoleFilter roleFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -23,13 +25,14 @@ public class SecurityConfig {
                 .authenticated()
                 .and()
                 .addFilterBefore(jwtFilter, BasicAuthenticationFilter.class)
+                .addFilterAfter(roleFilter, JWTFilter.class)
                 .httpBasic();
         return http.build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/api/student/login");
+        return (web) -> web.ignoring().antMatchers("/api/**");
     }
 
 }

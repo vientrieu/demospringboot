@@ -1,5 +1,6 @@
 package com.example.demospringboot.util;
 
+import com.example.demospringboot.dto.UserAuthentication;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,9 +18,11 @@ public class JwtUtil {
     private String secretKey;
 
     public String generateJwt() {
+        UserAuthentication userAuthentication = new UserAuthentication();
+        userAuthentication.setUserId(123L);
+        userAuthentication.setRole("USER");
         Map<String, Object> payload = new HashMap<>();
-        payload.put("userId", "123");
-        payload.put("role", "student");
+        payload.put("user", userAuthentication);
 
         return Jwts.builder()
                 .setClaims(payload)

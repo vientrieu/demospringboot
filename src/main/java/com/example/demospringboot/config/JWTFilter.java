@@ -1,6 +1,8 @@
 package com.example.demospringboot.config;
 
+import com.example.demospringboot.dto.UserAuthentication;
 import com.example.demospringboot.util.JwtUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +28,8 @@ public class JWTFilter implements Filter {
 
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -40,7 +44,8 @@ public class JWTFilter implements Filter {
         try {
             String token = httpRequest.getHeader(HttpHeaders.AUTHORIZATION).replace("Bearer ", "");
             Map<String, Object> payload = jwtUtil.getPayloadJwt(token);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(payload, null, new ArrayList<>());
+            UserAuthentication user = objectMapper.convertValue(payload.get("user"), UserAuthentication.class);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
             // do nothing

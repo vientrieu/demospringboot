@@ -10,9 +10,11 @@ import com.example.demospringboot.service.CRUDService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,10 @@ public class StudentServiceImpl implements CRUDService<StudentDto> {
     private CourseRepository courseRepository;
     @Autowired
     private ObjectMapper objectMapper;
+	@Autowired
+	private EntityManager entityManager;
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 
     @Override
     @Transactional(noRollbackFor = CustomizeException.class)
@@ -33,10 +39,9 @@ public class StudentServiceImpl implements CRUDService<StudentDto> {
         // kiểm tra dưới database khóa học này.
         input.getCourses().forEach(course -> {
             Course courseFound = courseRepository.findByCourseCode(course.getCourseCode());
+	        entityManager.persist(courseFound);
             // Nếu tồn tại thì lưu
             if (courseFound != null) {
-                courseFound.setCourseName(course.getCourseName());
-                courseRepository.save(courseFound);
                 student.getCourses().add(courseFound);
                 // map từ dto => entity để tương tác với database
             } else { // nếu chưa thì ném ra lỗi là khóa học chưa tồn tại
